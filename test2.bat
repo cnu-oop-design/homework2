@@ -1,6 +1,6 @@
 @echo off
 setlocal
-rem Homework 2 — 테스트 케이스 1~3 채점
+rem Homework 2 — 문제별 채점 (3개 테스트 케이스 기준)
 
 g++ main.cpp problem1.cpp problem2.cpp problem3.cpp problem4.cpp ^
     -o hw2_main.exe -std=c++17 > nul 2>&1
@@ -9,17 +9,21 @@ if errorlevel 1 (
     exit /b 1
 )
 
-set all_pass=true
-
-for %%i in (1 2 3) do (
-    .\hw2_main.exe Test\case%%i.txt > Test\output%%i.txt 2>nul
+for %%j in (1 2 3) do (
+    .\hw2_main.exe Test\case%%j.txt > Test\output%%j.txt 2>nul
     if errorlevel 1 (
-        echo Test %%i: Runtime Error
-        set all_pass=false
-    ) else (
-        powershell -NoProfile -ExecutionPolicy Bypass -Command ^
-            "$a = (Get-Content 'Test\output%%i.txt') -join [char]10; $e = (Get-Content 'Test\expected%%i.txt') -join [char]10; if ($a -eq $e) { Write-Host 'Test %%i: PASS' } else { Write-Host 'Test %%i: FAIL'; Compare-Object ($e -split [char]10) ($a -split [char]10) | ForEach-Object { Write-Host $_.InputObject } }"
+        echo Runtime Error (case%%j)
+        del hw2_main.exe 2>nul
+        exit /b 1
     )
 )
-
 del hw2_main.exe 2>nul
+
+set all_pass=true
+
+for %%i in (1 2 3 4) do (
+    powershell -NoProfile -ExecutionPolicy Bypass -Command ^
+        "$i = %%i; $next = $i + 1; $pass = $true; foreach ($j in 1,2,3) { $extract = { param($f) $c = Get-Content $f; $o = @(); $in = $false; foreach ($l in $c) { if ($l -match ('=== Problem ' + $i + ':')) { $in = $true }; if ($in -and $i -lt 4 -and $l -match ('=== Problem ' + $next + ':')) { break }; if ($in) { $o += $l } }; ($o -join \"`n\").TrimEnd() }; $a = (& $extract \"Test\output$j.txt\") -replace \"`r\"; $e = (& $extract \"Test\expected$j.txt\"); if ($a -ne $e) { $pass = $false; break } }; if ($pass) { Write-Host \"Problem $i`: PASS\" } else { Write-Host \"Problem $i`: FAIL\"; exit 1 }" ^
+    || set all_pass=false
+)
+
