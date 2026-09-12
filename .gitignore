@@ -1,0 +1,16 @@
+# 빌드 산출물
+hw2_main
+hw2_main.exe
+*.o
+*.obj
+*.out
+Test/output*.txt
+
+# IDE / 에디터
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
