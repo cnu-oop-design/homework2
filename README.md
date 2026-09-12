@@ -117,7 +117,7 @@ test2.bat
 
 ```bash
 git add problem1.cpp problem2.cpp problem3.cpp problem4.cpp
-git commit -m "homework2 제출"
+git commit -m "학번 이름"
 git push
 ```
 
