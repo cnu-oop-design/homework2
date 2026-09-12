@@ -13,19 +13,19 @@
  * ─────────────────────────────────────────────────────────────
  */
 
-// TODO: 두 정수의 합을 반환하세요.
+// a, b : 더할 두 정수
 int add(int a, int b) {
     // TODO
     return 0;
 }
 
-// TODO: 두 정수의 나눗셈 결과를 반환하세요 (정수 나눗셈).
+// a : 나뉨수 (dividend), b : 나눗수 (divisor)  — 정수 나눗셈으로 반환
 int divide(int a, int b) {
     // TODO
     return 0;
 }
 
-// TODO: a 를 static_cast<double> 로 변환한 뒤 b 로 나눈 결과를 반환하세요.
+// a : 실수로 변환할 정수, b : 나눗수 (divisor)
 double toDouble(int a, int b) {
     // TODO
     return 0.0;

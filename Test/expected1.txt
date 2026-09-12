@@ -15,18 +15,18 @@ toDouble(7, 2) = 3.5
 (unsigned char)(250 + 10) = 4
 === Problem 2: struct and Flow Control ===
 [Part 1] Most expensive product
-Name: Wine
-Price: 12.99
-[Part 2] Products with quantity > 50
+Name: Elderberry
+Price: 7.50
+[Part 2] Products with quantity > 20
 Count: 3
 [Part 3] Total inventory value
-Total: 1275.30
+Total: 469.00
 [Part 4] Price category
-Milk: cheap
-Bread: medium
-Wine: expensive
-Cheese: medium
-Butter: medium
+Apple: cheap
+Banana: cheap
+Cherry: expensive
+Date: medium
+Elderberry: expensive
 === Problem 3: Pointer ===
 [Part 1] Address and dereference
 val = 42
@@ -36,8 +36,8 @@ After *ptr = 100, val = 100
 After increment, x = 11
 After 2nd increment, x = 12
 [Part 3] findMax
-Max value = 8
-Max index = 2
+Max value = 9
+Max index = 3
 [Part 4] mySwap
 Before: a = 5, b = 8
 After: a = 8, b = 5
@@ -46,17 +46,17 @@ Pointer is null
 Pointer is not null
 === Problem 4: Integrated ===
 [Part 1] Compute averages
-Emma: 87.67
-Frank: 57.67
-Grace: 70.00
-Henry: 47.67
+Alice: 81.67
+Bob: 61.67
+Charlie: 91.67
+Diana: 71.67
 [Part 2] Top student
-Name: Emma
-Average: 87.67
-[Part 3] After bonus (threshold=65, bonus=10)
-Emma: 87.67
-Frank: 67.67
-Grace: 70.00
-Henry: 57.67
+Name: Charlie
+Average: 91.67
+[Part 3] After bonus (threshold=75, bonus=5)
+Alice: 81.67
+Bob: 66.67
+Charlie: 91.67
+Diana: 76.67
 [Part 4] Direct modification via pointer
-Emma new average: 91.00
+Alice new average: 88.33

@@ -2,21 +2,21 @@
  * Homework 2 — main.cpp
  * 이 파일은 수정하지 마세요.
  * problem1.cpp ~ problem4.cpp 에 있는 TODO 함수만 구현하세요.
+ *
+ * 실행: ./hw2_main Test/case1.txt
  */
 #include <iostream>
+#include <fstream>
 #include <iomanip>
 #include <string>
 using namespace std;
 
-// ── Struct definitions ────────────────────────────────────────
-// Problem 2 에서도 동일하게 정의됩니다.
 struct Product {
     string name;
     int    quantity;
     double price;
 };
 
-// Problem 4 에서도 동일하게 정의됩니다.
 struct Student {
     string name;
     int    scores[3];
@@ -45,16 +45,53 @@ Student* findTopStudent(Student* students, int n);
 void     applyBonus(Student* students, int n, double threshold, int bonus);
 
 // ─────────────────────────────────────────────────────────────
-int main() {
+int main(int argc, char* argv[]) {
+    if (argc < 2) {
+        cerr << "Usage: " << argv[0] << " <test_data_file>" << "\n";
+        return 1;
+    }
+    ifstream fin(argv[1]);
+    if (!fin) {
+        cerr << "Cannot open: " << argv[1] << "\n";
+        return 1;
+    }
+
+    // ── Read test data ────────────────────────────────────────
+    const int MAX_N = 50;
+
+    int np; fin >> np;
+    Product products[MAX_N];
+    for (int i = 0; i < np; i++)
+        fin >> products[i].name >> products[i].quantity >> products[i].price;
+
+    int countThreshold; fin >> countThreshold;
+
+    int k; fin >> k;
+    int arr[MAX_N];
+    for (int i = 0; i < k; i++) fin >> arr[i];
+
+    int ns; fin >> ns;
+    Student students[MAX_N];
+    for (int i = 0; i < ns; i++) {
+        fin >> students[i].name
+            >> students[i].scores[0]
+            >> students[i].scores[1]
+            >> students[i].scores[2];
+        students[i].average = 0.0;
+    }
+
+    double bonusThreshold; int bonus;
+    fin >> bonusThreshold >> bonus;
+    fin.close();
 
     // ══ Problem 1: Type Arithmetic and auto ══════════════════
     cout << "=== Problem 1: Type Arithmetic and auto ===" << "\n";
     cout << fixed << setprecision(1);
     {
         cout << "[Part 1] auto type deduction" << "\n";
-        auto x = 7 / 2;                        // 정수 / 정수 → int
-        auto y = 7.0 / 2;                      // double / int → double
-        auto z = static_cast<double>(7) / 2;   // 명시적 캐스팅 후 나눗셈
+        auto x = 7 / 2;
+        auto y = 7.0 / 2;
+        auto z = static_cast<double>(7) / 2;
         cout << "7 / 2 = " << x << "\n";
         cout << "7.0 / 2 = " << y << "\n";
         cout << "(double)7 / 2 = " << z << "\n";
@@ -67,14 +104,14 @@ int main() {
         cout << "[Part 3] char arithmetic" << "\n";
         char c = 'A';
         auto asInt   = static_cast<int>(c);
-        auto shifted = c + 32;                 // integer promotion: char → int
+        auto shifted = c + 32;
         cout << "'A' as int = " << asInt << "\n";
         cout << "'A' + 32 as int = " << shifted << "\n";
         cout << "(char)('A' + 32) = " << static_cast<char>(c + 32) << "\n";
 
         cout << "[Part 4] unsigned overflow" << "\n";
         unsigned char uc = 250;
-        unsigned char result = static_cast<unsigned char>(uc + 10); // 260 % 256 = 4
+        unsigned char result = static_cast<unsigned char>(uc + 10);
         cout << "(unsigned char)(250 + 10) = " << static_cast<int>(result) << "\n";
     }
 
@@ -82,30 +119,20 @@ int main() {
     cout << "=== Problem 2: struct and Flow Control ===" << "\n";
     cout << fixed << setprecision(2);
     {
-        Product products[5] = {
-            {"Apple",      100, 1.50},
-            {"Banana",      30, 0.80},
-            {"Cherry",      15, 5.00},
-            {"Date",        50, 3.20},
-            {"Elderberry",   8, 7.50}
-        };
-        int n = 5;
-
         cout << "[Part 1] Most expensive product" << "\n";
-        int idx = findMostExpensive(products, n);
+        int idx = findMostExpensive(products, np);
         cout << "Name: " << products[idx].name << "\n";
         cout << "Price: " << products[idx].price << "\n";
 
-        cout << "[Part 2] Products with quantity > 20" << "\n";
-        cout << "Count: " << countAboveThreshold(products, n, 20) << "\n";
+        cout << "[Part 2] Products with quantity > " << countThreshold << "\n";
+        cout << "Count: " << countAboveThreshold(products, np, countThreshold) << "\n";
 
         cout << "[Part 3] Total inventory value" << "\n";
-        cout << "Total: " << totalValue(products, n) << "\n";
+        cout << "Total: " << totalValue(products, np) << "\n";
 
         cout << "[Part 4] Price category" << "\n";
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < np; i++)
             cout << products[i].name << ": " << priceCategory(products[i].price) << "\n";
-        }
     }
 
     // ══ Problem 3: Pointer ════════════════════════════════════
@@ -127,8 +154,7 @@ int main() {
         cout << "After 2nd increment, x = " << x << "\n";
 
         cout << "[Part 3] findMax" << "\n";
-        int arr[5] = {3, 7, 1, 9, 4};
-        int* maxPtr = findMax(arr, 5);
+        int* maxPtr = findMax(arr, k);
         if (maxPtr != nullptr) {
             cout << "Max value = " << *maxPtr << "\n";
             cout << "Max index = " << (maxPtr - arr) << "\n";
@@ -144,56 +170,47 @@ int main() {
 
         cout << "[Part 5] nullptr" << "\n";
         int* nullPtr = nullptr;
-        if (nullPtr == nullptr) {
+        if (nullPtr == nullptr)
             cout << "Pointer is null" << "\n";
-        } else {
+        else
             cout << "Pointer is not null" << "\n";
-        }
         nullPtr = &val;
-        if (nullPtr == nullptr) {
+        if (nullPtr == nullptr)
             cout << "Pointer is null" << "\n";
-        } else {
+        else
             cout << "Pointer is not null" << "\n";
-        }
     }
 
     // ══ Problem 4: Integrated ═════════════════════════════════
     cout << "=== Problem 4: Integrated ===" << "\n";
     cout << fixed << setprecision(2);
     {
-        Student students[4] = {
-            {"Alice",   {80, 75, 90}, 0.0},
-            {"Bob",     {60, 55, 70}, 0.0},
-            {"Charlie", {95, 88, 92}, 0.0},
-            {"Diana",   {70, 65, 80}, 0.0}
-        };
-        int n = 4;
-
         cout << "[Part 1] Compute averages" << "\n";
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < ns; i++) {
             computeAverage(&students[i]);
             cout << students[i].name << ": " << students[i].average << "\n";
         }
 
         cout << "[Part 2] Top student" << "\n";
-        Student* top = findTopStudent(students, n);
+        Student* top = findTopStudent(students, ns);
         if (top != nullptr) {
             cout << "Name: " << top->name << "\n";
             cout << "Average: " << top->average << "\n";
         }
 
-        cout << "[Part 3] After bonus (threshold=75, bonus=5)" << "\n";
-        applyBonus(students, n, 75.0, 5);
-        for (int i = 0; i < n; i++) {
+        cout << "[Part 3] After bonus (threshold=" << (int)bonusThreshold
+             << ", bonus=" << bonus << ")" << "\n";
+        applyBonus(students, ns, bonusThreshold, bonus);
+        for (int i = 0; i < ns; i++) {
             computeAverage(&students[i]);
             cout << students[i].name << ": " << students[i].average << "\n";
         }
 
         cout << "[Part 4] Direct modification via pointer" << "\n";
-        Student* ptr = &students[0];
-        ptr->scores[0] = 100;
-        computeAverage(ptr);
-        cout << ptr->name << " new average: " << ptr->average << "\n";
+        Student* sptr = &students[0];
+        sptr->scores[0] = 100;
+        computeAverage(sptr);
+        cout << sptr->name << " new average: " << sptr->average << "\n";
     }
 
     return 0;

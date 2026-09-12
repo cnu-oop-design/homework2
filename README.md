@@ -27,11 +27,23 @@ g++ --version
 
 ```
 homework2/
-├── main.cpp        ← 수정 금지. 4문제 실행 로직 포함.
-├── problem1.cpp    ← Problem 1 구현 (Type Arithmetic and auto)
-├── problem2.cpp    ← Problem 2 구현 (struct and Flow Control)
-├── problem3.cpp    ← Problem 3 구현 (Pointer)
-└── problem4.cpp    ← Problem 4 구현 (Integrated)
+├── main.cpp              ← 수정 금지. 테스트 실행 로직 (테스트 데이터 파일을 읽어 실행).
+├── problem1.cpp          ← Problem 1 구현 (Type Arithmetic and auto)
+├── problem2.cpp          ← Problem 2 구현 (struct and Flow Control)
+├── problem3.cpp          ← Problem 3 구현 (Pointer)
+├── problem4.cpp          ← Problem 4 구현 (Integrated)
+├── test2.sh              ← 채점 스크립트 (macOS / Linux)
+├── test2.bat             ← 채점 스크립트 (Windows)
+├── .github/
+│   └── workflows/
+│       └── grade.yml     ← GitHub Actions 자동 채점 워크플로우
+└── Test/
+    ├── case1.txt         ← 테스트 케이스 1 입력 데이터
+    ├── case2.txt         ← 테스트 케이스 2 입력 데이터
+    ├── case3.txt         ← 테스트 케이스 3 입력 데이터
+    ├── expected1.txt     ← 테스트 케이스 1 기대 출력
+    ├── expected2.txt     ← 테스트 케이스 2 기대 출력
+    └── expected3.txt     ← 테스트 케이스 3 기대 출력
 ```
 
 ---
@@ -87,14 +99,17 @@ homework2/
 
 ```bash
 # macOS / Linux
-/bin/bash test2.sh
+bash test2.sh
 
 # Windows
 test2.bat
 ```
 
-`Test 2: PASS` 가 출력되면 성공입니다.  
-`Test 2: FAIL` 인 경우 예상 출력과 실제 출력을 함께 보여줍니다.
+테스트 케이스 3개를 순서대로 실행하며 각각 `PASS` / `FAIL` 을 출력합니다.  
+`FAIL` 인 경우 기대 출력과 실제 출력의 diff 를 함께 보여줍니다.
+
+테스트 데이터는 `Test/case1.txt` ~ `Test/case3.txt` 에 있으며,  
+`main.cpp` 는 이 파일을 읽어 실행합니다 (`./hw2_main Test/case1.txt` 형식).
 
 ---
 
